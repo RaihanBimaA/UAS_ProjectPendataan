@@ -19,20 +19,15 @@ public abstract class Lainnya {
     public abstract void hitungGaji();
     public abstract int hitungUmur(ArrayList<ArrayList<String>> data, int ke);
     
-    public int indexData(ArrayList<ArrayList<String>> data) {
-        
-        Scanner input = new Scanner(System.in);
-        
-        System.out.print("Masukkan kode karyawan : ");
-        String kodeKaryawan = input.nextLine();
+    public int indexData(ArrayList<ArrayList<String>> data, String kode) {
         
         for(int i = 0; i < data.size(); i++) {
             String dataKodeKaryawan = data.get(i).get(0);
             
-            if(dataKodeKaryawan.equals(kodeKaryawan)){
+            if(dataKodeKaryawan.equals(kode)){
                 this.indexdata = i;
             } else {
-                System.out.println("Data Tidak Ditemukan");
+                System.out.println("Data Tidak Terdeteksi");
             }
         }
         return this.indexdata;

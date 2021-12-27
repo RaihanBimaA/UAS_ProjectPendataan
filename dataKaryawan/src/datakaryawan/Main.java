@@ -21,6 +21,8 @@ public class Main {
         
         ArrayList<ArrayList<String>> data = new ArrayList<>();
         Scanner input = new Scanner(System.in);
+        int jumlahAnak, gajiPokok, tunjanganKel, tunjanganPegawai, tunjanganAnak, gajiKotor;
+        double potongan, gajiBersih;
         
         while( true ){    
             System.out.println("1. Tambah Data");
@@ -145,20 +147,21 @@ public class Main {
     
     public static void subMenu() {
         System.out.println("Sub Menu");
-        System.out.println("\n1. Kembali ke Menu Utama");
+        System.out.println("1. Kembali ke Menu Utama");
     }
     
     public static int memilih() {
         Scanner input = new Scanner(System.in);
         int pilihan;
         
-        System.out.println("Pilihan Menu : ");
+        System.out.print("Pilihan Menu : ");
         pilihan = Integer.parseInt(input.nextLine());
         
         return pilihan;
     }
     
     public static void keluar() {
+        System.out.println("Anda Telah Keluar");
         System.exit(0);
     }
 }

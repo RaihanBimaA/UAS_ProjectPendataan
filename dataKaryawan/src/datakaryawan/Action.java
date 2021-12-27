@@ -24,7 +24,7 @@ import java.util.Arrays;
  */
 public class Action extends Lainnya implements Interface {
     
-    int statusMenikah, usia, jumlahAnak, gajiPokok, tunjanganKel, tunjanganPegawai, tunjanganAnak, gajiKotor;
+    int jumlahAnak, gajiPokok, tunjanganKel, tunjanganPegawai, tunjanganAnak, gajiKotor, statusMenikah, usia;
     double potongan, gajiBersih;
     String menikah, golongan, status;
 
@@ -46,16 +46,23 @@ public class Action extends Lainnya implements Interface {
     
     @Override
     public void hitungGaji() {
-        if(golongan == "A") {
-            this.gajiPokok = 5000000;                
-        } else if(golongan == "B") {
-            this.gajiPokok = 6000000;
-        } else if(golongan == "C") {
-            this.gajiPokok = 7000000;
+        if(null != golongan) switch (golongan) {
+            case "A":
+                gajiPokok = 5000000;
+                break;
+            case "B":
+                gajiPokok = 6000000;
+                break;
+            case "C":
+                gajiPokok = 7000000;
+                break;
+            default:
+                break;
         }
+        System.out.println(gajiPokok);
         
         //tunjangan menikah
-        if(menikah == "Sudah Menikah") {
+        if(menikah == "Telah Menikah") {
             tunjanganKel = (gajiPokok * 10) / 100;
         } else {
             tunjanganKel = 0;
@@ -89,8 +96,8 @@ public class Action extends Lainnya implements Interface {
     public void tambahKaryawan(ArrayList<ArrayList<String>> data) {
         
         Scanner input = new Scanner(System.in);
-        
-        System.out.print("\nMasukkan Kode Karyawan : ");
+        System.out.println("\n");
+        System.out.print("Masukkan Kode Karyawan : ");
         String kodeKaryawan = input.nextLine();
         
         System.out.print("Masukkan Nama Karyawan : ");
@@ -112,25 +119,27 @@ public class Action extends Lainnya implements Interface {
             case "C" :
                 break;
             default :
-                System.out.println("\nStatus Menikah Tidak Valid, Silakan Ulangi dari Awal");
+                System.out.println("\n");
+                System.out.println("Status Menikah Tidak Valid, Ulangi Input Data");
                 tambahKaryawan(data);
         }
         
-        System.out.print("Masukkan Status Menikah ( 0 jika belum, 1 jika sudah) : ");
+        System.out.print("Pilih Status Menikah ( 0 = belum, 1 = sudah) : ");
         status = input.nextLine();
         if(Integer.parseInt(status) == 0) {
             data.add(new ArrayList<String>(
                 Arrays.asList(kodeKaryawan, namaKaryawan, alamat, tglLahir, golongan, status)
             ));
         } else if(Integer.parseInt(status) == 1) {
-            System.out.print("Masukkan Jumlah Anak : ");
+            System.out.print("Berapa Jumlah Anak : ");
             jumlahAnak = input.nextInt();
             
             data.add(new ArrayList<String>(
                 Arrays.asList(kodeKaryawan, namaKaryawan, alamat, tglLahir, golongan, status, Integer.toString(jumlahAnak))
             ));
         } else {
-            System.out.println("\nStatus Menikah Tidak Valid, Silakan Ulangi dari Awal");
+            System.out.println("\n");
+            System.out.println("Status Menikah Tidak Valid, Ulangi Input Data");
             tambahKaryawan(data);
         }
     }
@@ -140,29 +149,33 @@ public class Action extends Lainnya implements Interface {
         
         Scanner input = new Scanner(System.in);
         
-        System.out.print("Kode Karyawan yang mau dihapus : ");
+        System.out.print("Kode Karyawan yang hendak dihapus : ");
         String kodeKaryawan = input.nextLine();
         
-        int indexKaryawan = indexData(data);
+        int indexKaryawan = indexData(data, kodeKaryawan);
         
         if(indexKaryawan > -1) {
             data.remove(indexKaryawan);
-            System.out.println("Data Karyawan " + kodeKaryawan + " berhasil dihapus");
+            System.out.println("Data Karyawan " + kodeKaryawan + " telah dihapus");
         } else {
-            System.out.println("Data Karyawan tidak ditemukan");
+            System.out.println("Data Karyawan gagal dihapus karna tidak ditemukan");
         }
     }
 
     @Override
     public void cariKaryawan(ArrayList<ArrayList<String>> data) {
         
-        int indexKaryawan = indexData(data);
+        Scanner input = new Scanner(System.in);
+        
+        System.out.print("Masukkan kode karyawan : ");
+        String kodeKaryawan = input.nextLine();
+        
+        int indexKaryawan = indexData(data, kodeKaryawan);
         hitungUmur(data, indexKaryawan);
         hitungGaji();
         
         if(indexKaryawan > -1) {
-            
-            System.out.println("\n=========================================================");
+            System.out.println("\n");
             System.out.println("                  DATA PROFIL KARYAWAN                   ");
             System.out.println("---------------------------------------------------------");
 
@@ -178,7 +191,7 @@ public class Action extends Lainnya implements Interface {
                     break;
 
                 case 1 :
-                    System.out.println("Status Menikah          : Sudah Menikah");
+                    System.out.println("Status Menikah          : Telah Menikah");
                     System.out.println("Jumlah Anak             : " + jumlahAnak);
                     System.out.println("---------------------------------------------------------");
             }
@@ -191,14 +204,13 @@ public class Action extends Lainnya implements Interface {
             }if(jumlahAnak > 0){
                 System.out.println("Tunjangan Anak          : Rp" + tunjanganAnak); 
             }
-            System.out.println("--------------------------------------------------------- +");
             System.out.println("Gaji Kotor              : Rp" + gajiKotor);
             System.out.println("Potongan                : Rp" + potongan);
-            System.out.println("--------------------------------------------------------- -");
+            System.out.println("--------------------------------------------------------- ");
             System.out.println("Gaji Bersih             : Rp" + gajiBersih);
             
         } else {
-            System.out.println("Data Karyawan tidak ditemukan");
+            System.out.println("Data Karyawan tidak terdeteksi");
         }
     }
 
@@ -206,26 +218,27 @@ public class Action extends Lainnya implements Interface {
     public void printKaryawan(ArrayList<ArrayList<String>> data) {
         String leftAlign = "| %-8s | %-27s | %-8s | %-8s | %-20s | %-13s |%n";
         
-        System.out.println("\n==================================================================================================");
+        System.out.println("\n");
         System.out.println("                                   DATA KARYAWAN");
         System.out.println("--------------------------------------------------------------------------------------------------");
-        System.out.printf(leftAlign, "KODE KARY", "NAMA KARYAWAN", "GOL", "USIA", "STATUS NIKAH", "JUMLAH ANAK");
+        System.out.printf(leftAlign, "KODE", "NAMA", "GOLONGAN", "USIA", "STATUS", "JUMLAH ANAK");
         
 
             for(int i=0; i < data.size(); i++){  
                 
                 String kdKaryawan = data.get(i).get(0);
                 String nmKaryawan = data.get(i).get(1);
+                hitungUmur(data, i);
 
                 if( Integer.parseInt(status) == 1){
-                    menikah = "Sudah Menikah";
+                    menikah = "Telah Menikah";
                     jumlahAnak = Integer.parseInt(data.get(i).get(6));
                 }else if( Integer.parseInt(status) == 0){
                     menikah = "Belum Menikah";
                     jumlahAnak = 0;
                 }
 
-                System.out.printf(leftAlign, kdKaryawan, nmKaryawan, golongan, usia, status, jumlahAnak );
+                System.out.printf(leftAlign, kdKaryawan, nmKaryawan, golongan, usia, menikah, jumlahAnak );
         }
     }
 }
